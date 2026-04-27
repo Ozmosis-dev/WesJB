@@ -85,7 +85,7 @@ export function ContactContent() {
             initial={{ opacity: 0, y: 40, filter: "blur(4px)" }}
             whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
             viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.7, ease: SPRING }}
+            transition={{ duration: 0.7, delay: 0.4, ease: SPRING }}
           >
             <p className={CX.eyebrow}>Booking</p>
             <h2 className={cn(CX.displayH2, "mb-8")}>Reach Out Direct.</h2>
@@ -95,7 +95,7 @@ export function ContactContent() {
             className="grid grid-cols-2 gap-6 max-md:grid-cols-1"
             variants={{
               hidden: {},
-              visible: { transition: { staggerChildren: 0.1 } },
+              visible: { transition: { staggerChildren: 0.1, delayChildren: 0.5 } },
             }}
             initial="hidden"
             whileInView="visible"

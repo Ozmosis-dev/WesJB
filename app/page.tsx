@@ -1,9 +1,11 @@
 "use client";
 
+import { Fragment, useState, useEffect } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import { SPRING } from "@/lib/motion";
+import { ArrowRight, Star } from "lucide-react";
+import { SPRING, staggerContainerVariants, staggerItemVariants } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 
 // ── Shared class fragments ───────────────────────────────────────────────────
@@ -75,8 +77,8 @@ const PILLARS = [
     body: "Every session is built around the athlete who walks in. Wes reads what is in front of him, then adapts the work in real time.",
     icon: (
       <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden>
-        <path d="M11 2L13.5 7.5H19L14.5 11L16.5 17L11 13.5L5.5 17L7.5 11L3 7.5H8.5L11 2Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"/>
-        <circle cx="11" cy="11" r="2.5" fill="currentColor"/>
+        <path d="M11 2L13.5 7.5H19L14.5 11L16.5 17L11 13.5L5.5 17L7.5 11L3 7.5H8.5L11 2Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
+        <circle cx="11" cy="11" r="2.5" fill="currentColor" />
       </svg>
     ),
   },
@@ -85,8 +87,8 @@ const PILLARS = [
     body: "Comfortable being uncomfortable. The reps that move you forward are the ones that ask something of you.",
     icon: (
       <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden>
-        <polyline points="3,17 8,10 13,13 19,5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-        <polyline points="15,5 19,5 19,9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+        <polyline points="3,17 8,10 13,13 19,5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+        <polyline points="15,5 19,5 19,9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
       </svg>
     ),
   },
@@ -95,7 +97,7 @@ const PILLARS = [
     body: "Confidence is built on competence. The work you put in here shows up later when the moment is bigger than the gym.",
     icon: (
       <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden>
-        <path d="M11 2L13 8H19L14 12L16 18L11 14L6 18L8 12L3 8H9L11 2Z" fill="currentColor"/>
+        <path d="M11 2L13 8H19L14 12L16 18L11 14L6 18L8 12L3 8H9L11 2Z" fill="currentColor" />
       </svg>
     ),
   },
@@ -104,9 +106,9 @@ const PILLARS = [
     body: "Basketball, coaching, confidence. Keep the main thing the main thing, and the rest takes care of itself.",
     icon: (
       <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden>
-        <circle cx="11" cy="11" r="9" stroke="currentColor" strokeWidth="1.5"/>
-        <circle cx="11" cy="11" r="5.5" stroke="currentColor" strokeWidth="1.5"/>
-        <circle cx="11" cy="11" r="2" fill="currentColor"/>
+        <circle cx="11" cy="11" r="9" stroke="currentColor" strokeWidth="1.5" />
+        <circle cx="11" cy="11" r="5.5" stroke="currentColor" strokeWidth="1.5" />
+        <circle cx="11" cy="11" r="2" fill="currentColor" />
       </svg>
     ),
   },
@@ -135,10 +137,19 @@ const FAQ = [
   },
 ];
 
+const PROGRESSION = [
+  "Sharpen Your Skills",
+  "Build Basketball IQ",
+  "Elevate Your Game",
+  "Reach Your Next Level",
+] as const;
+
 // ── Page ─────────────────────────────────────────────────────────────────────
 export default function HomePage() {
   const { scrollY } = useScroll();
   const heroImageY = useTransform(scrollY, [0, 600], [0, 80]);
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => { setMounted(true); }, []);
 
   return (
     <>
@@ -151,7 +162,7 @@ export default function HomePage() {
             initial={{ scale: 1.05 }}
             animate={{ scale: 1 }}
             transition={{ duration: 1.4, ease: SPRING }}
-            style={{ y: heroImageY }}
+            style={mounted ? { y: heroImageY } : {}}
           >
             <Image
               src="/inspo/inspo-04-warm-gym-arched.jpg"
@@ -344,15 +355,58 @@ export default function HomePage() {
               program.
             </motion.p>
           </motion.div>
+
         </div>
+
+        <motion.div
+          className="flex items-center gap-3 mt-10 px-gutter max-md:flex-col"
+          variants={staggerContainerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-80px" }}
+        >
+          {PROGRESSION.map((step, i) => (
+            <Fragment key={step}>
+              <motion.div
+                className="flex-1 flex items-center gap-3 py-4 px-6 rounded-[4px] border border-cream/8 bg-white/3 backdrop-blur-sm max-md:w-full"
+                variants={staggerItemVariants}
+              >
+                <span className="font-mono text-[11px] tracking-[0.2em] uppercase text-accent shrink-0">
+                  0{i + 1}
+                </span>
+                <span className="font-display font-semibold uppercase leading-[1.1] text-[clamp(0.875rem,1.3vw,1rem)] max-md:text-[1.05rem] text-cream flex-1">
+                  {step}
+                </span>
+                {i < PROGRESSION.length - 1 ? (
+                  <span className="text-accent/40 shrink-0 ml-auto md:hidden" aria-hidden>
+                    <ArrowRight size={16} strokeWidth={1.75} />
+                  </span>
+                ) : (
+                  <span className="text-accent shrink-0 ml-auto md:hidden" aria-hidden>
+                    <Star size={15} strokeWidth={1.5} />
+                  </span>
+                )}
+              </motion.div>
+              {i < PROGRESSION.length - 1 && (
+                <motion.span
+                  className="text-accent/40 shrink-0 max-md:hidden"
+                  variants={staggerItemVariants}
+                  aria-hidden
+                >
+                  <ArrowRight size={16} strokeWidth={1.75} />
+                </motion.span>
+              )}
+            </Fragment>
+          ))}
+        </motion.div>
       </section>
 
       {/* ── Image break — player on steps ─────────────────────────────────── */}
-      <section className="my-[clamp(3rem,8vw,6rem)]" aria-hidden>
+      <section className="mt-[clamp(3rem,8vw,6rem)]" aria-hidden>
         <motion.div
           className="w-full aspect-[21/9] relative overflow-hidden bg-surface"
           initial={{ opacity: 0, scale: 1.02 }}
-          whileInView={{ opacity: 1, scale: 1 }}
+          whileInView={{ opacity: 0.8, scale: 1 }}
           viewport={{ once: true, margin: "-50px" }}
           transition={{ duration: 1, ease: SPRING }}
         >
@@ -545,7 +599,7 @@ export default function HomePage() {
       </section>
 
       {/* ── Image break — red rim ──────────────────────────────────────────── */}
-      <section className="my-[clamp(3rem,8vw,6rem)]" aria-hidden>
+      <section className="mt-[clamp(3rem,8vw,6rem)]" aria-hidden>
         <motion.div
           className="w-full aspect-[21/9] relative overflow-hidden bg-surface"
           initial={{ opacity: 0, scale: 1.02 }}
