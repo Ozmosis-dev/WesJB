@@ -57,7 +57,7 @@ export function EliteInquiryForm() {
 
   return (
     <form
-      className="flex flex-col gap-6 max-w-[880px]"
+      className="flex flex-col gap-6 max-w-[880px] mx-auto"
       onSubmit={handleSubmit}
       aria-label="Elite inquiry form"
     >
@@ -173,7 +173,7 @@ export function EliteInquiryForm() {
         />
       </label>
 
-      <p className="text-[14px] text-cream/60 leading-[1.5]">
+      <p className="text-[14px] text-cream/60 leading-normal text-center">
         Submitting opens your email client with the inquiry pre-filled. Wes will
         respond direct from{" "}
         <a
@@ -189,11 +189,11 @@ export function EliteInquiryForm() {
         type="submit"
         disabled={submitted}
         className={cn(
-          "inline-flex items-center justify-center self-start gap-3",
+          "inline-flex items-center justify-center w-full gap-3",
           "bg-accent text-cream no-underline",
           "font-display text-[16px] font-semibold tracking-[0.08em] uppercase",
           "py-[18px] px-9 rounded-[2px] min-h-[44px]",
-          "transition-colors duration-[120ms] ease-snap",
+          "transition-colors duration-120 ease-snap",
           "disabled:opacity-60 disabled:cursor-not-allowed",
           !submitted && "hover:bg-accent-dark"
         )}

@@ -214,8 +214,8 @@ export function ContactContent() {
                 className={cn(
                   "inline-flex items-center gap-2",
                   "text-accent font-display text-[16px] font-semibold tracking-[0.08em] uppercase",
-                  "underline underline-offset-4 decoration-[1px]",
-                  "hover:decoration-2 transition-all duration-[120ms] ease-snap"
+                  "underline underline-offset-4 decoration-1",
+                  "hover:decoration-2 transition-all duration-120 ease-snap"
                 )}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -225,7 +225,7 @@ export function ContactContent() {
             </div>
 
             <motion.div
-              className="bg-surface border border-cream/15 rounded-[4px] overflow-hidden min-h-[360px] relative [filter:grayscale(1)_contrast(1.05)_brightness(0.95)] max-md:min-h-[280px]"
+              className="bg-surface border border-cream/15 rounded-[4px] overflow-hidden min-h-[360px] relative filter-[grayscale(1)_contrast(1.05)_brightness(0.95)] max-md:min-h-[280px]"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               viewport={{ once: true, margin: "-80px" }}
@@ -244,9 +244,9 @@ export function ContactContent() {
       </motion.section>
 
       {/* ── Photo break ───────────────────────────────────────────────────── */}
-      <section className="my-[clamp(3rem,8vw,6rem)]" aria-hidden>
+      <section className="mt-[clamp(3rem,8vw,6rem)]" aria-hidden>
         <motion.div
-          className="w-full aspect-[21/9] relative overflow-hidden bg-surface"
+          className="w-full aspect-21/9 relative overflow-hidden bg-surface"
           initial={{ opacity: 0, scale: 1.02 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true, margin: "-50px" }}
@@ -258,7 +258,7 @@ export function ContactContent() {
             fill
             sizes="100vw"
             quality={88}
-            className="object-cover [filter:grayscale(1)_contrast(1.05)]"
+            className="object-cover filter-[grayscale(1)_contrast(1.05)]"
           />
         </motion.div>
       </section>
@@ -267,6 +267,7 @@ export function ContactContent() {
       <section className="py-section bg-warm" id="elite-inquiry">
         <div className={CX.container}>
           <motion.div
+            className="text-center flex flex-col items-center"
             initial={{ opacity: 0, y: 40, filter: "blur(4px)" }}
             whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
             viewport={{ once: true, margin: "-100px" }}
@@ -274,7 +275,7 @@ export function ContactContent() {
           >
             <p className={CX.eyebrow}>Elite Track · By Application Only</p>
             <h2 className={cn(CX.displayH2, "mb-4")}>The Work Goes Deeper Here.</h2>
-            <p className="text-lead leading-[1.55] text-cream max-w-[65ch] mb-10">
+            <p className="text-lead leading-[1.55] text-cream max-w-[65ch] mb-10 mx-auto">
               Sustained programs for high school starters, college prospects, and
               competitive players who need a coach who can sharpen the edge. Each
               elite program is custom-scoped to the athlete, the goal, and the

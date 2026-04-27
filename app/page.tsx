@@ -38,7 +38,7 @@ const CREDENTIALS = [
   { number: "Almost a Decade", label: "In the NBA" },
   { number: "#4 Overall", label: "2010 NBA Draft" },
   { number: "Syracuse", label: "College" },
-  { number: "New Orleans", label: "Coaching out of" },
+  { number: "New Orleans", label: "Based coaching" },
 ];
 
 const PRICING_TIERS = [
@@ -73,18 +73,42 @@ const PILLARS = [
   {
     label: "Tailored",
     body: "Every session is built around the athlete who walks in. Wes reads what is in front of him, then adapts the work in real time.",
+    icon: (
+      <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden>
+        <path d="M11 2L13.5 7.5H19L14.5 11L16.5 17L11 13.5L5.5 17L7.5 11L3 7.5H8.5L11 2Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"/>
+        <circle cx="11" cy="11" r="2.5" fill="currentColor"/>
+      </svg>
+    ),
   },
   {
     label: "Challenge",
     body: "Comfortable being uncomfortable. The reps that move you forward are the ones that ask something of you.",
+    icon: (
+      <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden>
+        <polyline points="3,17 8,10 13,13 19,5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+        <polyline points="15,5 19,5 19,9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+      </svg>
+    ),
   },
   {
     label: "Confidence",
     body: "Confidence is built on competence. The work you put in here shows up later when the moment is bigger than the gym.",
+    icon: (
+      <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden>
+        <path d="M11 2L13 8H19L14 12L16 18L11 14L6 18L8 12L3 8H9L11 2Z" fill="currentColor"/>
+      </svg>
+    ),
   },
   {
     label: "The Main Thing",
     body: "Basketball, coaching, confidence. Keep the main thing the main thing, and the rest takes care of itself.",
+    icon: (
+      <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden>
+        <circle cx="11" cy="11" r="9" stroke="currentColor" strokeWidth="1.5"/>
+        <circle cx="11" cy="11" r="5.5" stroke="currentColor" strokeWidth="1.5"/>
+        <circle cx="11" cy="11" r="2" fill="currentColor"/>
+      </svg>
+    ),
   },
 ];
 
@@ -333,8 +357,8 @@ export default function HomePage() {
           transition={{ duration: 1, ease: SPRING }}
         >
           <Image
-            src="/inspo/inspo-02-player-on-steps.jpg"
-            alt=""
+            src="/photos/WSJ youth.jpg"
+            alt="Wesley Johnson as a youth player"
             fill
             sizes="100vw"
             quality={88}
@@ -577,7 +601,8 @@ export default function HomePage() {
                 }}
               >
                 <hr className="w-12 h-0.5 bg-accent border-0 mb-2" />
-                <h3 className="font-display font-semibold text-[24px] uppercase text-cream m-0">
+                <h3 className="font-display font-semibold text-[24px] uppercase text-cream m-0 flex items-center gap-3">
+                  <span className="text-accent shrink-0">{p.icon}</span>
                   {p.label}
                 </h3>
                 <p className="text-[16px] leading-[1.6] text-cream/80 max-w-[56ch]">

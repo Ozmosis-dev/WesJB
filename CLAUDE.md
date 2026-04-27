@@ -14,7 +14,9 @@ Marketing/conversion website for **Wesley Johnson's basketball training** operat
 |---|---|
 | Framework | Next.js 16 — **App Router** |
 | React | 19.x |
-| Styling | **Custom CSS Modules + CSS Variables** — no Tailwind |
+| Styling | **CSS Modules + CSS Variables** for scoped styles; **Tailwind v4** for layout utilities |
+| Animation | **Framer Motion** — constants in `lib/motion.ts` |
+| Icons | **lucide-react** + custom inline SVGs |
 | State | `useState` in one client component only |
 | Auth | None |
 | Data | Hardcoded constants in page files |
@@ -59,7 +61,7 @@ public/
 
 ## Design System
 
-**No Tailwind.** CSS variables in `globals.css`, scoped styles in `.module.css` files.
+CSS variables in `globals.css`, scoped brand styles in `.module.css` files, Tailwind v4 utilities for layout.
 
 ### Key Tokens
 ```css
@@ -80,12 +82,13 @@ public/
 .section .section--surface .section--warm
 ```
 
-### Rules
-- CSS Modules for all component/page scoping
-- camelCase CSS class names (`.heroHeadline`, `.tierFeatured`)
+### Styling Rules
+- CSS Modules for scoped component/page styles — camelCase class names (`.heroHeadline`, `.tierFeatured`)
+- Tailwind utilities for layout (flex, grid, gap, padding, overflow, whitespace, etc.) — inline in JSX
+- Never mix: don't put layout in `.module.css`, don't put brand colors/typography in Tailwind arbitrary values
 - Mobile-first, breakpoints at 768px / 480px / 360px
-- All photos: `filter: grayscale(1) contrast(1.05)`
 - Images via `next/image`, formats: AVIF + WebP
+- Photos: `filter: grayscale(1) contrast(1.05)` by default — exceptions require explicit approval
 
 ---
 
@@ -116,9 +119,201 @@ const FAQ: { q: string; a: string }[] = [...]
 import s from './contact.module.css'
 // ...
 <section className={s.hero}>
-  <h1 className={`${s.heroHeadline} display`}>...</h1>
+  {/* CSS module for brand styles, Tailwind for layout */}
+  <h1 className={`${s.heroHeadline} display flex items-center gap-3`}>...</h1>
 </section>
 ```
+
+---
+
+## Animation System
+
+All animation uses **Framer Motion**. Constants live in `lib/motion.ts` — always import from there.
+
+```typescript
+import { motion } from "framer-motion";
+import { SPRING, fadeUpVariants, staggerContainerVariants, staggerItemVariants } from "@/lib/motion";
+```
+
+### Constants (`lib/motion.ts`)
+```typescript
+SPRING = [0.32, 0.72, 0, 1]          // cubic-bezier — use for all ease values
+fadeUpVariants                         // { hidden: opacity 0 + y 40 + blur 4px, visible: ... }
+staggerContainerVariants               // staggerChildren: 0.1
+staggerItemVariants                    // same as fadeUpVariants, for stagger children
+```
+
+### Pattern 1 — Hero entrance (page load, not scroll-triggered)
+```tsx
+// Word-by-word blur reveal — used for h1 on all pages
+{"Your Headline Here".split(" ").map((word, i) => (
+  <motion.span
+    key={i}
+    className="inline-block mr-[0.22em] last:mr-0"
+    initial={{ opacity: 0, y: 28, filter: "blur(6px)" }}
+    animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+    transition={{ delay: 0.22 + i * 0.08, duration: 0.55, ease: SPRING }}
+  >
+    {word}
+  </motion.span>
+))}
+
+// Supporting text beneath hero h1
+<motion.p
+  initial={{ opacity: 0, y: 20 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ delay: 0.7, duration: 0.6, ease: SPRING }}
+>
+```
+
+### Pattern 2 — Section entrance (scroll-triggered)
+```tsx
+// Single element fade-up with blur
+<motion.div
+  initial={{ opacity: 0, y: 40, filter: "blur(4px)" }}
+  whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+  viewport={{ once: true, margin: "-100px" }}
+  transition={{ duration: 0.7, ease: SPRING }}
+>
+
+// Shorthand using exported variants
+<motion.div variants={fadeUpVariants} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }}>
+```
+
+### Pattern 3 — Stagger grid (cards, pillars, lists)
+```tsx
+<motion.ul
+  variants={staggerContainerVariants}
+  initial="hidden"
+  whileInView="visible"
+  viewport={{ once: true, margin: "-80px" }}
+>
+  {items.map((item) => (
+    <motion.li key={item.label} variants={staggerItemVariants}>
+      ...
+    </motion.li>
+  ))}
+</motion.ul>
+```
+
+### Pattern 4 — Photo entrance
+```tsx
+// Slide in from side with blur (used when photo is beside text)
+<motion.div
+  initial={{ opacity: 0, x: -24, filter: "blur(6px)" }}
+  whileInView={{ opacity: 0.75, x: 0, filter: "blur(0px)" }}  // note: opacity target = desired final opacity
+  viewport={{ once: true, margin: "-80px" }}
+  transition={{ duration: 0.8, ease: SPRING }}
+>
+
+// Scale-in for full-bleed photo backgrounds
+<motion.div
+  initial={{ scale: 1.05 }}
+  animate={{ scale: 1 }}
+  transition={{ duration: 1.4, ease: SPRING }}
+>
+```
+
+### Pattern 5 — Staggered blockquote lines
+```tsx
+// Each line reveals separately — used for pull-quotes and large display text
+{["Line One", "Line Two", "Line Three"].map((line, i) => (
+  <motion.span
+    key={line}
+    className="block"
+    initial={{ opacity: 0, y: 32, filter: "blur(8px)" }}
+    whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+    viewport={{ once: true, margin: "-60px" }}
+    transition={{ delay: i * 0.12, duration: 0.6, ease: SPRING }}
+  >
+    {line}
+  </motion.span>
+))}
+```
+
+### Pattern 6 — Infinite marquee
+```tsx
+// Outer wrapper: fades in on scroll
+<motion.div
+  className="overflow-hidden"
+  initial={{ opacity: 0, filter: "blur(4px)" }}
+  whileInView={{ opacity: 1, filter: "blur(0px)" }}
+  viewport={{ once: true, margin: "-60px" }}
+  transition={{ duration: 0.8, ease: SPRING }}
+>
+  {/* Inner strip: duplicate content 4x, animate -50% for seamless loop */}
+  <motion.div
+    className="flex whitespace-nowrap"
+    style={{ width: "max-content" }}
+    animate={{ x: ["0%", "-50%"] }}
+    transition={{ duration: 35, ease: "linear", repeat: Infinity }}
+  >
+    {Array.from({ length: 4 }).map((_, i) => (
+      <span key={i}>...repeated content...</span>
+    ))}
+  </motion.div>
+</motion.div>
+```
+
+### Rules
+- Always use `SPRING` for `ease` — never hardcode cubic-bezier strings
+- `whileInView` always uses `viewport={{ once: true }}` — animations don't replay on scroll-up
+- Hero animations use `animate`, not `whileInView`
+- `margin` on viewport: `-100px` for section headers, `-80px` for cards, `-60px` for inline elements
+- Never animate layout properties (width, height) — only opacity, transform (x/y/scale), filter
+
+---
+
+## Icons & SVGs
+
+### Lucide icons
+```typescript
+import { ArrowRight, ChevronDown } from "lucide-react"
+// Use for UI chrome (nav, buttons, arrows)
+```
+
+### Custom SVG icons in pillars/sections
+Add as `icon: ReactNode` in the data constant, render with accent color wrapper:
+```typescript
+const ITEMS = [
+  {
+    label: "Section Title",
+    body: "...",
+    icon: (
+      <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden>
+        <path ... stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+      </svg>
+    ),
+  },
+]
+
+// Render inline with title
+<h3 className="... flex items-center gap-3">
+  <span className="text-accent shrink-0">{item.icon}</span>
+  {item.label}
+</h3>
+```
+
+### Outline/stroke text (marquee style)
+```tsx
+<span
+  className="font-display font-bold uppercase"
+  style={{ WebkitTextStroke: "1.5px white", color: "transparent" }}
+>
+  Text Here
+</span>
+```
+
+---
+
+## Client Component Pattern
+
+Pages that need Framer Motion or `useState` use a `_content.tsx` split:
+```
+app/about/page.tsx          ← server component, exports metadata
+app/about/_content.tsx      ← "use client", all JSX and animation
+```
+`page.tsx` just renders `<AboutContent />`. This keeps metadata server-side while allowing client animations.
 
 ---
 
@@ -166,11 +361,14 @@ pnpm lint
 
 ---
 
-## Known Placeholders
+## Photos
 
-- `/public/inspo/` — placeholder inspiration images, NOT final Wes photos
-- Only real photo: `/public/photos/wes-pelicans-orange-bg.jpg`
-- Photo break sections on Home and Contact use inspo images — awaiting real photos
+Real photos in `/public/photos/`:
+- `wes-pelicans-orange-bg.jpg` — Wes in Pelicans gear, orange background
+- `WSJ youth.jpg` — Wes as a youth player (used in home photo break)
+- `WSJ syracuse.png` — Wes at Syracuse (used in about page blockquote section)
+
+Placeholder inspiration images in `/public/inspo/` — NOT final, awaiting replacement with real Wes photos.
 
 ---
 
