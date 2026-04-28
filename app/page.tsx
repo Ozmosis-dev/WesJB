@@ -356,49 +356,48 @@ export default function HomePage() {
             </motion.p>
           </motion.div>
 
-        </div>
-
-        <motion.div
-          className="flex items-center gap-3 mt-10 px-gutter max-md:flex-col"
-          variants={staggerContainerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-80px" }}
-        >
-          {PROGRESSION.map((step, i) => (
-            <Fragment key={step}>
-              <motion.div
-                className="flex-1 flex items-center gap-3 py-4 px-6 rounded-[4px] border border-cream/8 bg-white/3 backdrop-blur-sm max-md:w-full"
-                variants={staggerItemVariants}
-              >
-                <span className="font-mono text-[11px] tracking-[0.2em] uppercase text-accent shrink-0">
-                  0{i + 1}
-                </span>
-                <span className="font-display font-semibold uppercase leading-[1.1] text-[clamp(0.875rem,1.3vw,1rem)] max-md:text-[1.05rem] text-cream flex-1">
-                  {step}
-                </span>
-                {i < PROGRESSION.length - 1 ? (
-                  <span className="text-accent/40 shrink-0 ml-auto md:hidden" aria-hidden>
-                    <ArrowRight size={16} strokeWidth={1.75} />
-                  </span>
-                ) : (
-                  <span className="text-accent shrink-0 ml-auto md:hidden" aria-hidden>
-                    <Star size={15} strokeWidth={1.5} />
-                  </span>
-                )}
-              </motion.div>
-              {i < PROGRESSION.length - 1 && (
-                <motion.span
-                  className="text-accent/40 shrink-0 max-md:hidden"
+          <motion.div
+            className="flex items-center gap-3 mt-10 max-md:flex-col"
+            variants={staggerContainerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-80px" }}
+          >
+            {PROGRESSION.map((step, i) => (
+              <Fragment key={step}>
+                <motion.div
+                  className="flex-1 flex items-center gap-3 py-4 px-6 rounded-[4px] border border-cream/8 bg-white/3 backdrop-blur-sm max-md:w-full"
                   variants={staggerItemVariants}
-                  aria-hidden
                 >
-                  <ArrowRight size={16} strokeWidth={1.75} />
-                </motion.span>
-              )}
-            </Fragment>
-          ))}
-        </motion.div>
+                  <span className="font-mono text-[11px] tracking-[0.2em] uppercase text-accent shrink-0">
+                    0{i + 1}
+                  </span>
+                  <span className="font-display font-semibold uppercase leading-[1.1] text-[clamp(0.875rem,1.3vw,1rem)] max-md:text-[1.05rem] text-cream flex-1">
+                    {step}
+                  </span>
+                  {i < PROGRESSION.length - 1 ? (
+                    <span className="text-accent/40 shrink-0 ml-auto md:hidden" aria-hidden>
+                      <ArrowRight size={16} strokeWidth={1.75} />
+                    </span>
+                  ) : (
+                    <span className="text-accent shrink-0 ml-auto md:hidden" aria-hidden>
+                      <Star size={15} strokeWidth={1.5} />
+                    </span>
+                  )}
+                </motion.div>
+                {i < PROGRESSION.length - 1 && (
+                  <motion.span
+                    className="text-accent/40 shrink-0 max-md:hidden"
+                    variants={staggerItemVariants}
+                    aria-hidden
+                  >
+                    <ArrowRight size={16} strokeWidth={1.75} />
+                  </motion.span>
+                )}
+              </Fragment>
+            ))}
+          </motion.div>
+        </div>
       </section>
 
       {/* ── Image break — player on steps ─────────────────────────────────── */}
