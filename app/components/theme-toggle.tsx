@@ -55,7 +55,7 @@ export function ThemeToggle({ variant = "nav" }: ThemeToggleProps) {
         isFab && [
           "w-12 h-12",
           "bg-[#1a1714] border border-white/[0.07]",
-          "text-cream/55 hover:text-accent",
+          "text-[rgba(240,235,226,0.55)] hover:text-[#c0541a]",
           "shadow-[inset_0_1px_0_rgba(255,255,255,0.07),0_8px_32px_rgba(0,0,0,0.65),0_2px_8px_rgba(0,0,0,0.4)]",
         ],
         !mounted && "invisible",

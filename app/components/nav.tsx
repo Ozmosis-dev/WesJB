@@ -112,7 +112,7 @@ export function Nav() {
                 "font-display font-semibold tracking-[0.08em] uppercase",
                 "text-[14px] px-[22px] min-h-[44px] py-3 rounded-[2px]",
                 "transition-colors duration-[120ms] ease-snap",
-                "max-md:text-[12px] max-md:tracking-[0.06em] max-md:px-4 max-md:py-2.5"
+                "max-md:text-[11px] max-md:tracking-[0.05em] max-md:px-3 max-md:py-2 max-md:min-h-[38px]"
               )}
             >
               Book a Session
