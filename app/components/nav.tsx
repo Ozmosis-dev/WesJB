@@ -102,7 +102,7 @@ export function Nav() {
         {/* Book CTA */}
         <motion.div whileTap={{ scale: 0.97 }}>
           <Link
-            href="/contact#book"
+            href="/#pricing"
             className={cn(
               "inline-flex items-center justify-center",
               "bg-accent hover:bg-accent-dark text-cream no-underline",

@@ -9,7 +9,7 @@ const NAV_LINKS = [
   { href: "/", label: "Home" },
   { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },
-  { href: "/contact#book", label: "Book a Session" },
+  { href: "/#pricing", label: "Book a Session" },
 ];
 
 const colLinkClass =

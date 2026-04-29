@@ -425,7 +425,7 @@ export function AboutContent() {
             </p>
             <div className="flex gap-4 flex-wrap mt-2">
               <motion.div whileTap={{ scale: 0.97 }}>
-                <Link href="/contact#book" className={CX.ctaPrimary}>
+                <Link href="/#pricing" className={CX.ctaPrimary}>
                   Book a Session
                 </Link>
               </motion.div>
