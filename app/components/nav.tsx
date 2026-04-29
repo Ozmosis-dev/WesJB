@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
+import { ThemeToggle } from "@/app/components/theme-toggle";
 
 const NAV_LINKS = [
   { href: "/", label: "Home" },
@@ -99,22 +100,25 @@ export function Nav() {
           </motion.ul>
         </nav>
 
-        {/* Book CTA */}
-        <motion.div whileTap={{ scale: 0.97 }}>
-          <Link
-            href="/#pricing"
-            className={cn(
-              "inline-flex items-center justify-center",
-              "bg-accent hover:bg-accent-dark text-cream no-underline",
-              "font-display font-semibold tracking-[0.08em] uppercase",
-              "text-[14px] px-[22px] min-h-[44px] py-3 rounded-[2px]",
-              "transition-colors duration-[120ms] ease-snap",
-              "max-md:text-[12px] max-md:tracking-[0.06em] max-md:px-4 max-md:py-2.5"
-            )}
-          >
-            Book a Session
-          </Link>
-        </motion.div>
+        {/* Theme toggle + Book CTA */}
+        <div className="flex items-center gap-5">
+          <div className="max-md:hidden"><ThemeToggle /></div>
+          <motion.div whileTap={{ scale: 0.97 }}>
+            <Link
+              href="/#pricing"
+              className={cn(
+                "inline-flex items-center justify-center",
+                "bg-accent hover:bg-accent-dark text-cream no-underline",
+                "font-display font-semibold tracking-[0.08em] uppercase",
+                "text-[14px] px-[22px] min-h-[44px] py-3 rounded-[2px]",
+                "transition-colors duration-[120ms] ease-snap",
+                "max-md:text-[12px] max-md:tracking-[0.06em] max-md:px-4 max-md:py-2.5"
+              )}
+            >
+              Book a Session
+            </Link>
+          </motion.div>
+        </div>
       </div>
     </motion.header>
   );

@@ -197,7 +197,7 @@ export default function HomePage() {
   return (
     <>
       {/* ── Hero ──────────────────────────────────────────────────────────── */}
-      <section className="relative min-h-[clamp(520px,80vh,760px)] flex items-center overflow-hidden isolate">
+      <section data-photo-hero="" className="relative min-h-[clamp(520px,80vh,760px)] flex items-center overflow-hidden isolate">
         {/* Background */}
         <div className="absolute inset-0 -z-10">
           <motion.div

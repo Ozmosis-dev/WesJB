@@ -1,9 +1,11 @@
 import type { Metadata, Viewport } from "next";
+import Script from "next/script";
 import { Oswald, Work_Sans, JetBrains_Mono } from "next/font/google";
 import { Nav } from "@/app/components/nav";
 import { Footer } from "@/app/components/footer";
 import { PageTransition } from "@/app/components/page-transition";
 import { Providers } from "@/app/components/providers";
+import { ThemeToggle } from "@/app/components/theme-toggle";
 import "./globals.css";
 
 const oswald = Oswald({
@@ -76,7 +78,10 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0d0c0b",
+  themeColor: [
+    { media: "(prefers-color-scheme: dark)",  color: "#0d0c0b" },
+    { media: "(prefers-color-scheme: light)", color: "#f8f5f0" },
+  ],
   width: "device-width",
   initialScale: 1,
 };
@@ -90,14 +95,24 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${oswald.variable} ${workSans.variable} ${jetBrainsMono.variable}`}
+      suppressHydrationWarning
     >
       <body>
+        <Script
+          id="theme-init"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{ __html: `(function(){try{var s=localStorage.getItem('wjb-theme');var m=window.matchMedia('(prefers-color-scheme:light)').matches?'light':'dark';document.documentElement.setAttribute('data-theme',s||m);}catch(e){}})();` }}
+        />
         <Providers>
           <Nav />
           <main>
             <PageTransition>{children}</PageTransition>
           </main>
           <Footer />
+          {/* Floating theme toggle — mobile only, outside all stacking contexts */}
+          <div className="fixed bottom-6 right-5 z-[60] md:hidden">
+            <ThemeToggle variant="fab" />
+          </div>
         </Providers>
       </body>
     </html>

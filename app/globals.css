@@ -112,6 +112,74 @@
   }
 }
 
+/* =========================================================================
+   Light mode — token remap
+   Triggers: system prefers-color-scheme:light (unless [data-theme="dark"])
+             OR manual [data-theme="light"] on <html>.
+   [data-theme="dark"] restores dark tokens for users on light-system devices.
+   CSS has no mixins — the ~7-rule light token block is declared twice (once
+   per trigger). Kept intentionally small to justify the duplication.
+   ========================================================================= */
+
+/* ── Trigger 1: system light preference (overrideable) ──────────────────── */
+@media (prefers-color-scheme: light) {
+  html:not([data-theme="dark"]) {
+    --color-canvas:      #f8f5f0;
+    --color-surface:     #ede8df;
+    --color-warm:        #e4d5c0;
+    --color-cream:       #1a1714;
+    --color-accent:      #b23f12;
+    --color-accent-dark: #9a3410;
+    --marquee-stroke:    #1a1714;
+  }
+  html:not([data-theme="dark"]) .bg-accent { --color-cream: #f5f0e8; }
+  html:not([data-theme="dark"]) [data-photo-hero] { --color-cream: #f5f0e8; color: #f5f0e8; }
+  html:not([data-theme="dark"]) header img[alt="Wes Johnson Basketball"],
+  html:not([data-theme="dark"]) footer img[alt="Wes Johnson Basketball"] {
+    filter: invert(1) sepia(0.06) brightness(0.88);
+  }
+  html:not([data-theme="dark"]) ::selection { background: var(--color-accent); color: #f5f0e8; }
+  html:not([data-theme="dark"]) .backdrop-blur-sm[class*="bg-white"] {
+    background-color: rgba(26, 23, 20, 0.04) !important;
+  }
+}
+
+/* ── Trigger 2: manual light override ───────────────────────────────────── */
+html[data-theme="light"] {
+  --color-canvas:      #f8f5f0;
+  --color-surface:     #ede8df;
+  --color-warm:        #e4d5c0;
+  --color-cream:       #1a1714;
+  --color-accent:      #b23f12;
+  --color-accent-dark: #9a3410;
+  --marquee-stroke:    #1a1714;
+}
+html[data-theme="light"] .bg-accent { --color-cream: #f5f0e8; }
+html[data-theme="light"] [data-photo-hero] { --color-cream: #f5f0e8; color: #f5f0e8; }
+html[data-theme="light"] header img[alt="Wes Johnson Basketball"],
+html[data-theme="light"] footer img[alt="Wes Johnson Basketball"] {
+  filter: invert(1) sepia(0.06) brightness(0.88);
+}
+html[data-theme="light"] ::selection { background: var(--color-accent); color: #f5f0e8; }
+html[data-theme="light"] .backdrop-blur-sm[class*="bg-white"] {
+  background-color: rgba(26, 23, 20, 0.04) !important;
+}
+
+/* ── Explicit dark override (light-system user who toggled dark) ────────── */
+html[data-theme="dark"] {
+  --color-canvas:      #0d0c0b;
+  --color-surface:     #2c2925;
+  --color-warm:        #3b2a1a;
+  --color-cream:       #f0ebe2;
+  --color-accent:      #c0541a;
+  --color-accent-dark: #a64814;
+  --marquee-stroke:    white;
+}
+html[data-theme="dark"] header img[alt="Wes Johnson Basketball"],
+html[data-theme="dark"] footer img[alt="Wes Johnson Basketball"] {
+  filter: none;
+}
+
 /* Reduced motion — CSS transitions */
 @media (prefers-reduced-motion: reduce) {
   *,

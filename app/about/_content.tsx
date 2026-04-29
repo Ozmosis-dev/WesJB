@@ -179,7 +179,7 @@ export function AboutContent() {
             <span key={i} className="inline-flex items-center gap-8 pr-8">
               <span
                 className="font-display font-bold uppercase tracking-[-0.01em] text-[clamp(72px,8vw,120px)] leading-none"
-                style={{ WebkitTextStroke: "1.5px white", color: "transparent" }}
+                style={{ WebkitTextStroke: "1.5px var(--marquee-stroke, white)", color: "transparent" }}
               >
                 Wesley Johnson
               </span>
