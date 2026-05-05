@@ -103,6 +103,17 @@ export default function RootLayout({
           strategy="beforeInteractive"
           dangerouslySetInnerHTML={{ __html: `(function(){try{var s=localStorage.getItem('wjb-theme');var m=window.matchMedia('(prefers-color-scheme:light)').matches?'light':'dark';document.documentElement.setAttribute('data-theme',s||m);}catch(e){}})();` }}
         />
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-4N5509V9RQ"
+          strategy="afterInteractive"
+        />
+        <Script
+          id="gtag-init"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-4N5509V9RQ');`,
+          }}
+        />
         <Providers>
           <Nav />
           <main>
