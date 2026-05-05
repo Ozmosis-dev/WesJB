@@ -6,6 +6,7 @@ import { Footer } from "@/app/components/footer";
 import { PageTransition } from "@/app/components/page-transition";
 import { Providers } from "@/app/components/providers";
 import { ThemeToggle } from "@/app/components/theme-toggle";
+import { SITE_URL, SITE_NAME } from "@/lib/site";
 import "./globals.css";
 
 const oswald = Oswald({
@@ -29,21 +30,15 @@ const jetBrainsMono = JetBrains_Mono({
   display: "swap",
 });
 
-// Prefer the actual Vercel production URL when present so og:image / twitter:image
-// resolve against the deployment that is actually serving — falls back to the
-// canonical custom domain. Once wes.enapragma.dev is aliased to v10, both paths
-// produce the same URL.
-const SITE_URL = process.env.VERCEL_PROJECT_PRODUCTION_URL
-  ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
-  : "https://wes.enapragma.dev";
-const SITE_NAME = "Wes Johnson Basketball";
 const SITE_DESCRIPTION =
   "Private basketball training with Wesley Johnson, a former top-5 NBA draft pick who played in the league for almost a decade and now develops the next generation of elite players out of New Orleans.";
+
+const HOME_TITLE = `Private Basketball Training New Orleans — ${SITE_NAME}`;
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: `${SITE_NAME} · New Orleans`,
+    default: HOME_TITLE,
     template: `%s · ${SITE_NAME}`,
   },
   description: SITE_DESCRIPTION,
@@ -58,17 +53,20 @@ export const metadata: Metadata = {
     "NBA training",
     "elite basketball coaching",
   ],
+  alternates: {
+    canonical: "/",
+  },
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: SITE_URL,
+    url: "/",
     siteName: SITE_NAME,
-    title: `${SITE_NAME} · New Orleans`,
+    title: HOME_TITLE,
     description: SITE_DESCRIPTION,
   },
   twitter: {
     card: "summary_large_image",
-    title: `${SITE_NAME} · New Orleans`,
+    title: HOME_TITLE,
     description: SITE_DESCRIPTION,
   },
   robots: {
@@ -86,6 +84,41 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
+const SITE_SCHEMA = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "LocalBusiness",
+      "@id": `${SITE_URL}/#business`,
+      "name": SITE_NAME,
+      "url": SITE_URL,
+      "description": "Private basketball training in New Orleans with Wesley Johnson, former top-5 NBA draft pick and nine-year NBA veteran.",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "3001 Tchoupitoulas St",
+        "addressLocality": "New Orleans",
+        "addressRegion": "LA",
+        "postalCode": "70115",
+        "addressCountry": "US",
+      },
+      "priceRange": "$$",
+      "serviceType": "Basketball Training",
+    },
+    {
+      "@type": "Person",
+      "@id": `${SITE_URL}/#wes`,
+      "name": "Wesley Johnson",
+      "url": `${SITE_URL}/about`,
+      "jobTitle": "Basketball Coach",
+      "alumniOf": {
+        "@type": "CollegeOrUniversity",
+        "name": "Syracuse University",
+      },
+      "worksFor": { "@id": `${SITE_URL}/#business` },
+    },
+  ],
+};
+
 export default function RootLayout({
   children,
 }: {
@@ -98,6 +131,10 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(SITE_SCHEMA) }}
+        />
         <Script
           id="theme-init"
           strategy="beforeInteractive"

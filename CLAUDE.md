@@ -4,7 +4,7 @@
 
 Marketing/conversion website for **Wesley Johnson's basketball training** operation in New Orleans. Three pages: Home (pricing), About (story), Contact (booking). Static site, no backend.
 
-**Live:** `wes.enapragma.dev` | **Status:** v10, production-ready, actively maintained
+**Live:** `www.wesjbasketball.com` | **Status:** v10, production-ready, actively maintained
 
 ---
 
@@ -330,11 +330,6 @@ Do not add `"use client"` to pages or layout.
 ## Environment Variables
 
 **Zero required for local dev.** App runs with just `pnpm install && pnpm dev`.
-
-**Optional (auto-set by Vercel in production):**
-```
-VERCEL_PROJECT_PRODUCTION_URL    # Falls back to https://wes.enapragma.dev
-```
 
 ---
 
