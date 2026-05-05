@@ -104,14 +104,14 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: `(function(){try{var s=localStorage.getItem('wjb-theme');var m=window.matchMedia('(prefers-color-scheme:light)').matches?'light':'dark';document.documentElement.setAttribute('data-theme',s||m);}catch(e){}})();` }}
         />
         <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-4N5509V9RQ"
+          src="https://www.googletagmanager.com/gtag/js?id=G-X12RCSNZKQ"
           strategy="afterInteractive"
         />
         <Script
           id="gtag-init"
           strategy="afterInteractive"
           dangerouslySetInnerHTML={{
-            __html: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-4N5509V9RQ');`,
+            __html: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-X12RCSNZKQ');`,
           }}
         />
         <Providers>
