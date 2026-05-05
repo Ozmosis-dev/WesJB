@@ -16,43 +16,37 @@ const fieldInput = cn(
   "focus:border-accent"
 );
 
-export function EliteInquiryForm() {
-  const [submitted, setSubmitted] = useState(false);
+type Status = "idle" | "loading" | "success" | "error";
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+export function EliteInquiryForm() {
+  const [status, setStatus] = useState<Status>("idle");
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    setStatus("loading");
     const form = new FormData(e.currentTarget);
 
-    const name = String(form.get("name") || "").trim();
-    const email = String(form.get("email") || "").trim();
-    const phone = String(form.get("phone") || "").trim();
-    const level = String(form.get("level") || "").trim();
-    const goal = String(form.get("goal") || "").trim();
-    const budget = String(form.get("budget") || "").trim();
-    const timeline = String(form.get("timeline") || "").trim();
+    const payload = {
+      name: String(form.get("name") || "").trim(),
+      email: String(form.get("email") || "").trim(),
+      phone: String(form.get("phone") || "").trim(),
+      level: String(form.get("level") || "").trim(),
+      goal: String(form.get("goal") || "").trim(),
+      budget: String(form.get("budget") || "").trim(),
+      timeline: String(form.get("timeline") || "").trim(),
+    };
 
-    const lines = [
-      "Elite Track Inquiry",
-      "",
-      `Name: ${name}`,
-      `Email: ${email}`,
-      `Phone: ${phone}`,
-      `Athlete level: ${level}`,
-      `Timeline: ${timeline}`,
-      `Budget: ${budget}`,
-      "",
-      "Training goal:",
-      goal,
-      "",
-      "---",
-      "Sent from wesjbasketball.com elite inquiry form",
-    ];
-
-    const body = encodeURIComponent(lines.join("\r\n"));
-    const subject = encodeURIComponent(`Elite Inquiry · ${name || "(name pending)"}`);
-
-    window.location.href = `mailto:wes@wesjbasketball.com?subject=${subject}&body=${body}`;
-    setSubmitted(true);
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      if (!res.ok) throw new Error("send failed");
+      setStatus("success");
+    } catch {
+      setStatus("error");
+    }
   }
 
   return (
@@ -173,35 +167,49 @@ export function EliteInquiryForm() {
         />
       </label>
 
-      <p className="text-[14px] text-cream/60 leading-normal text-center">
-        Submitting opens your email client with the inquiry pre-filled. Wes will
-        respond direct from{" "}
-        <a
-          href="mailto:wes@wesjbasketball.com"
-          className="text-accent underline underline-offset-[3px]"
-        >
-          wes@wesjbasketball.com
-        </a>
-        .
-      </p>
+      {status === "error" && (
+        <p className="text-[14px] text-red-400 leading-normal text-center">
+          Something went wrong. Email{" "}
+          <a
+            href="mailto:wes@wesjbasketball.com"
+            className="underline underline-offset-[3px]"
+          >
+            wes@wesjbasketball.com
+          </a>{" "}
+          directly.
+        </p>
+      )}
 
-      <motion.button
-        type="submit"
-        disabled={submitted}
-        className={cn(
-          "inline-flex items-center justify-center w-full gap-3",
-          "bg-accent text-cream no-underline",
-          "font-display text-[16px] font-semibold tracking-[0.08em] uppercase",
-          "py-[18px] px-9 rounded-[2px] min-h-[44px]",
-          "transition-colors duration-120 ease-snap",
-          "disabled:opacity-60 disabled:cursor-not-allowed",
-          !submitted && "hover:bg-accent-dark"
-        )}
-        whileTap={!submitted ? { scale: 0.97 } : undefined}
-        transition={{ type: "spring", stiffness: 400, damping: 20 }}
-      >
-        {submitted ? "Sending…" : "Send Inquiry"}
-      </motion.button>
+      {status !== "success" && (
+        <motion.button
+          type="submit"
+          disabled={status === "loading"}
+          className={cn(
+            "inline-flex items-center justify-center w-full gap-3",
+            "bg-accent text-cream no-underline",
+            "font-display text-[16px] font-semibold tracking-[0.08em] uppercase",
+            "py-[18px] px-9 rounded-[2px] min-h-[44px]",
+            "transition-colors duration-120 ease-snap",
+            "disabled:opacity-60 disabled:cursor-not-allowed",
+            status === "idle" && "hover:bg-accent-dark"
+          )}
+          whileTap={status === "idle" ? { scale: 0.97 } : undefined}
+          transition={{ type: "spring", stiffness: 400, damping: 20 }}
+        >
+          {status === "loading" ? "Sending…" : "Send Inquiry"}
+        </motion.button>
+      )}
+
+      {status === "success" && (
+        <motion.p
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, ease: SPRING }}
+          className="text-center text-[16px] text-cream/90 py-4"
+        >
+          Inquiry sent. Wes will be in touch.
+        </motion.p>
+      )}
     </form>
   );
 }
