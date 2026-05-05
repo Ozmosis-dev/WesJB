@@ -107,23 +107,34 @@ function PrivateInquiryCard() {
   );
 }
 
+type ContactStatus = "idle" | "loading" | "success" | "error";
+
 function BasicContactForm() {
-  const [submitted, setSubmitted] = useState(false);
+  const [status, setStatus] = useState<ContactStatus>("idle");
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    setStatus("loading");
     const form = new FormData(e.currentTarget);
-    const name = String(form.get("name") || "").trim();
-    const email = String(form.get("email") || "").trim();
-    const subject = String(form.get("subject") || "").trim();
-    const message = String(form.get("message") || "").trim();
 
-    const lines = [`Name: ${name}`, `Email: ${email}`, "", message];
-    const body = encodeURIComponent(lines.join("\r\n"));
-    const subjectEncoded = encodeURIComponent(subject || `Message from ${name || "wesjbasketball.com"}`);
+    const payload = {
+      name: String(form.get("name") || "").trim(),
+      email: String(form.get("email") || "").trim(),
+      subject: String(form.get("subject") || "").trim(),
+      message: String(form.get("message") || "").trim(),
+    };
 
-    window.location.href = `mailto:wes@wesjbasketball.com?subject=${subjectEncoded}&body=${body}`;
-    setSubmitted(true);
+    try {
+      const res = await fetch("/api/general", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      if (!res.ok) throw new Error("send failed");
+      setStatus("success");
+    } catch {
+      setStatus("error");
+    }
   }
 
   return (
@@ -176,23 +187,47 @@ function BasicContactForm() {
           placeholder="What do you want to ask or know?"
         />
       </label>
-      <motion.button
-        type="submit"
-        disabled={submitted}
-        className={cn(
-          "inline-flex items-center justify-center w-full gap-3 mt-2",
-          "bg-accent text-cream",
-          "font-display text-[16px] font-semibold tracking-[0.08em] uppercase",
-          "py-[18px] px-9 rounded-[2px] min-h-[44px]",
-          "transition-colors duration-[120ms] ease-snap",
-          "disabled:opacity-60 disabled:cursor-not-allowed",
-          !submitted && "hover:bg-accent-dark"
-        )}
-        whileTap={!submitted ? { scale: 0.97 } : undefined}
-        transition={{ type: "spring", stiffness: 400, damping: 20 }}
-      >
-        {submitted ? "Opening email…" : "Send Message"}
-      </motion.button>
+
+      {status === "error" && (
+        <p className="text-[13px] text-red-400 leading-normal">
+          Something went wrong. Email{" "}
+          <a href="mailto:wes@wesjbasketball.com" className="underline underline-offset-[3px]">
+            wes@wesjbasketball.com
+          </a>{" "}
+          directly.
+        </p>
+      )}
+
+      {status !== "success" && (
+        <motion.button
+          type="submit"
+          disabled={status === "loading"}
+          className={cn(
+            "inline-flex items-center justify-center w-full gap-3 mt-2",
+            "bg-accent text-cream",
+            "font-display text-[16px] font-semibold tracking-[0.08em] uppercase",
+            "py-[18px] px-9 rounded-[2px] min-h-[44px]",
+            "transition-colors duration-[120ms] ease-snap",
+            "disabled:opacity-60 disabled:cursor-not-allowed",
+            status === "idle" && "hover:bg-accent-dark"
+          )}
+          whileTap={status === "idle" ? { scale: 0.97 } : undefined}
+          transition={{ type: "spring", stiffness: 400, damping: 20 }}
+        >
+          {status === "loading" ? "Sending…" : "Send Message"}
+        </motion.button>
+      )}
+
+      {status === "success" && (
+        <motion.p
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, ease: SPRING }}
+          className="text-[15px] text-cream/90 py-3"
+        >
+          Message sent. Wes will be in touch.
+        </motion.p>
+      )}
     </form>
   );
 }
