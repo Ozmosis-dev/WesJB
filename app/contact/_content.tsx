@@ -7,6 +7,7 @@ import Link from "next/link";
 import { EliteInquiryForm } from "./elite-inquiry-form";
 import { SPRING } from "@/lib/motion";
 import { cn } from "@/lib/utils";
+import { trackEvent } from "@/lib/analytics";
 
 const PRIVATE_BODY = `Hi Wes,%0D%0A%0D%0AI'd like to book a private session.%0D%0A%0D%0AName:%0D%0AAthlete age (if not me):%0D%0APreferred days/times:%0D%0ASessions per week (1, 2, or 3):%0D%0AOne sentence on the goal:%0D%0A%0D%0AThanks,%0D%0A`;
 
@@ -92,6 +93,7 @@ function PrivateInquiryCard() {
       <motion.div whileTap={{ scale: 0.97 }} className="mt-2">
         <a
           href={`mailto:wes@wesjbasketball.com?subject=Private+Session+Inquiry&body=${PRIVATE_BODY}`}
+          onClick={() => trackEvent("email_direct_click")}
           className={cn(
             "inline-flex items-center justify-center w-full gap-3",
             "bg-surface hover:bg-surface/70 text-cream no-underline",
@@ -132,6 +134,7 @@ function BasicContactForm() {
       });
       if (!res.ok) throw new Error("send failed");
       setStatus("success");
+      trackEvent("general_contact_submit");
     } catch {
       setStatus("error");
     }

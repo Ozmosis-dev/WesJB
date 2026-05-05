@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { SPRING } from "@/lib/motion";
+import { trackEvent } from "@/lib/analytics";
 
 const fieldLabel =
   "font-display text-[12px] font-medium tracking-[0.18em] uppercase text-cream/80";
@@ -44,6 +45,7 @@ export function EliteInquiryForm() {
       });
       if (!res.ok) throw new Error("send failed");
       setStatus("success");
+      trackEvent("elite_inquiry_submit");
     } catch {
       setStatus("error");
     }

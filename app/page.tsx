@@ -7,6 +7,7 @@ import Link from "next/link";
 import { ArrowRight, Star } from "lucide-react";
 import { SPRING, staggerContainerVariants, staggerItemVariants } from "@/lib/motion";
 import { cn } from "@/lib/utils";
+import { trackEvent } from "@/lib/analytics";
 
 // ── Shared class fragments ───────────────────────────────────────────────────
 const CX = {
@@ -284,7 +285,7 @@ export default function HomePage() {
               }}
             >
               <motion.div whileTap={{ scale: 0.97 }}>
-                <Link href="#pricing" className={CX.ctaPrimary}>
+                <Link href="#pricing" className={CX.ctaPrimary} onClick={() => trackEvent("book_session_hero_click")}>
                   Book a Session
                 </Link>
               </motion.div>
@@ -554,6 +555,7 @@ export default function HomePage() {
                     target="_blank"
                     rel="noopener noreferrer"
                     className={CX.ctaPrimary}
+                    onClick={() => trackEvent("book_tier_click", { tier_name: t.name })}
                   >
                     Book This Tier
                   </Link>

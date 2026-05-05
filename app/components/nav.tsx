@@ -6,6 +6,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { ThemeToggle } from "@/app/components/theme-toggle";
+import { trackEvent } from "@/lib/analytics";
 
 const NAV_LINKS = [
   { href: "/", label: "Home" },
@@ -106,6 +107,7 @@ export function Nav() {
           <motion.div whileTap={{ scale: 0.97 }}>
             <Link
               href="/#pricing"
+              onClick={() => trackEvent("book_session_nav_click")}
               className={cn(
                 "inline-flex items-center justify-center",
                 "bg-accent hover:bg-accent-dark text-cream no-underline",
