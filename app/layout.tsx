@@ -31,9 +31,9 @@ const jetBrainsMono = JetBrains_Mono({
 });
 
 const SITE_DESCRIPTION =
-  "Private basketball training with Wesley Johnson, a former top-5 NBA draft pick who played in the league for almost a decade and now develops the next generation of elite players out of New Orleans.";
+  "Train with Wesley Johnson — former top-5 NBA pick who spent nearly a decade in the league, now coaching the next generation of elite players in New Orleans.";
 
-const HOME_TITLE = `Private Basketball Training New Orleans — ${SITE_NAME}`;
+const HOME_TITLE = "Private Basketball Training New Orleans — Wes Johnson";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
