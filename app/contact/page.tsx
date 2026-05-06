@@ -23,6 +23,14 @@ export const metadata: Metadata = {
     title: "Book Private Basketball Training in New Orleans — Wes Johnson",
     description:
       "Book a private session with Wesley Johnson in New Orleans, or apply for the elite track: sustained, custom-scoped programs for serious athletes.",
+    images: [
+      {
+        url: "/photos/wes-pelicans-orange-bg.jpg",
+        width: 3168,
+        height: 1344,
+        alt: "Book private basketball training with Wesley Johnson in New Orleans",
+      },
+    ],
   },
   twitter: {
     title: "Book Private Basketball Training in New Orleans — Wes Johnson",

@@ -25,6 +25,14 @@ export const metadata: Metadata = {
       "Wesley Johnson — Former NBA Player & Private Basketball Coach in New Orleans",
     description:
       "The journey of Wesley Johnson from a small town outside Dallas to Syracuse to almost a decade in the NBA, and now coaching out of New Orleans.",
+    images: [
+      {
+        url: "/photos/wes-pelicans-orange-bg.jpg",
+        width: 3168,
+        height: 1344,
+        alt: "Wesley Johnson — Former NBA Player & Private Basketball Coach",
+      },
+    ],
   },
   twitter: {
     title:
