@@ -42,8 +42,10 @@ const config: NextConfig = {
   poweredByHeader: false,
   compress: true,
   images: {
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920],
     formats: ["image/avif", "image/webp"],
     qualities: [75, 85, 88, 90],
+    minimumCacheTTL: 31536000,
   },
   async headers() {
     return [{ source: "/(.*)", headers: SECURITY_HEADERS }];

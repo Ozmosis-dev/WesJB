@@ -214,7 +214,7 @@ export default function HomePage() {
               fill
               priority
               sizes="100vw"
-              quality={85}
+              quality={75}
               className={cn(
                 "object-cover [object-position:50%_50%]",
                 "[filter:grayscale(0.85)_contrast(1.05)_brightness(0.7)]",
